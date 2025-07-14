@@ -1,0 +1,30 @@
+name: Notificar Cambios por Email
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar correo
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          to: "18348771@uagro.mx,18315681@uagro.mx,23251502@uagro.mx,19312076@uagro.mx,22251811@uagro.mx,22251867@uagro.mx,09552@uagro.mx,15516@uagro.mx,24722899@uagro.mx"
+          from: "Notificador GitHub - UAGro"
+          subject: "📢 Nuevo cambio en ${{ github.repository }}"
+          body: |
+            🚀 Se ha actualizado el repositorio:
+
+            👤 **Autor:** ${{ github.actor }}
+            📌 **Mensaje:** ${{ github.event.head_commit.message }}
+            🔗 **Enlace:** ${{ github.event.head_commit.url }}
+            🕒 **Fecha:** ${{ github.event.head_commit.timestamp }}
+
+            ¡Por favor revisen los cambios!
